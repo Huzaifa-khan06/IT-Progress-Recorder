@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FOA | Daily Progress Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+    <style>
+        :root {
+            --navy: #101b35;
+            --violet: #6854e7;
+            --blue: #5f80ef;
+            --ink: #172442;
+            --muted: #71809b;
+            --line: #e4e9f3;
+            --bg: #f5f7fc;
+            --good: #0d986f
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 14px 'DM Sans', sans-serif
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        button:disabled {
+            opacity: .55;
+            cursor: not-allowed
+        }
+
+        .shell {
+            display: flex;
+            min-height: 100vh
+        }
+
+        .sidebar {
+            width: 244px;
+            background: #111c38;
+            color: #d4dcef;
+            padding: 30px 19px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 0 6px 30px;
+            border-bottom: 1px solid #ffffff19
+        }
+
+        .brandmark {
+            height: 40px;
+            width: 40px;
+            border-radius: 12px;
+            background: #7968f7;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-size: 21px
+        }
+
+        .brand b {
+            display: block;
+            color: white;
+            font: 800 16px Manrope
+        }
+
+        .brand small {
+            display: block;
+            color: #aab5d1;
+            font-size: 10px;
+            margin-top: 4px
+        }
+
+        .side-label {
+            font-size: 10px;
+            letter-spacing: 1.6px;
+            color: #7d90b7;
+            font-weight: 800;
+            margin: 35px 14px 11px
+        }
+
+        .nav {
+            width: 100%;
+            padding: 13px 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: #c9d2e9;
+            background: none;
+            border: 0;
+            text-align: left;
+            margin-bottom: 5px
+        }
+
+        .nav.active {
+            color: #fff;
+            background: #6555db
+        }
+
+        .nav svg {
+            width: 17px;
+            height: 17px
+        }
+
+        .side-bottom {
+            margin-top: auto;
+            border-radius: 13px;
+            padding: 16px;
+            background: #ffffff0b;
+            color: #b7c2dd;
+            font-size: 12px;
+            line-height: 1.6
+        }
+
+        .side-bottom strong {
+            color: white
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0
+        }
+
+        .topbar {
+            height: 81px;
+            background: white;
+            border-bottom: 1px solid #e9ecf5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 43px
+        }
+
+        .crumb {
+            color: #94a0b6;
+            font-size: 12px
+        }
+
+        .crumb strong {
+            color: #253653
+        }
+
+        .avatar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700
+        }
+
+        .avatar-icon {
+            height: 37px;
+            width: 37px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #eceaff;
+            color: #6958dc;
+            font-weight: 800
+        }
+
+        .content {
+            max-width: 1370px;
+            padding: 36px 43px 75px;
+            margin: auto
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            color: #7464dc;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: Manrope, sans-serif
+        }
+
+        h1 {
+            font-size: 30px;
+            letter-spacing: -1.1px;
+            margin: 0 0 6px;
+            font-weight: 800
+        }
+
+        .intro {
+            color: #8490a8;
+            margin: 0 0 27px;
+            font-size: 13px
+        }
+
+        .hero {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .pill {
+            color: #22785f;
+            background: #e2f6ed;
+            border: 1px solid #c7ebdb;
+            border-radius: 100px;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 800
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid #e9edf6;
+            border-radius: 15px;
+            padding: 20px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px #142e5705
+        }
+
+        .stat small {
+            color: #8391a9;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .stat strong {
+            display: block;
+            font: 800 23px Manrope;
+            margin-top: 4px
+        }
+
+        .stat .bubble {
+            height: 42px;
+            width: 42px;
+            border-radius: 13px;
+            background: #eeebff;
+            color: #7161e9;
+            display: grid;
+            place-items: center;
+            font-size: 19px
+        }
+
+        .stat:nth-child(2) .bubble {
+            background: #e7f4ff;
+            color: #487dc7
+        }
+
+        .stat:nth-child(3) .bubble {
+            background: #e7f8ef;
+            color: #28a479
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid #e6eaf4;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px #162e5008;
+            margin: 20px 0;
+            overflow: hidden
+        }
+
+        .panel-head {
+            padding: 22px 25px 18px;
+            display: flex;
+            gap: 13px;
+            align-items: center;
+            border-bottom: 1px solid #edf0f6
+        }
+
+        .section-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 11px;
+            background: #eeecff;
+            display: grid;
+            place-items: center;
+            color: #6a57db;
+            font-size: 18px
+        }
+
+        .section-icon.blue {
+            background: #e9f3ff;
+            color: #477ccd
+        }
+
+        .section-icon.green {
+            background: #e5f7ee;
+            color: #1c986e
+        }
+
+        .section-icon.orange {
+            background: #fff0e2;
+            color: #c57b28
+        }
+
+        .panel-head h2 {
+            font-size: 15px;
+            margin: 0 0 4px
+        }
+
+        .panel-head p {
+            font-size: 11px;
+            color: #94a0b5;
+            margin: 0
+        }
+
+        .panel-body {
+            padding: 23px 25px 26px
+        }
+
+        .fields {
+            display: grid;
+            gap: 16px
+        }
+
+        .fields.five {
+            grid-template-columns: 1.25fr 1fr 1fr 1fr 1fr
+        }
+
+        .fields.three {
+            grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+
+        .fields.two {
+            grid-template-columns: repeat(2, minmax(0, 1fr))
+        }
+
+        label.field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #52617c
+        }
+
+        .field input,
+        .field select,
+        .field textarea,
+        .text-input {
+            width: 100%;
+            background: #fcfdff;
+            border: 1px solid #e0e6f0;
+            border-radius: 9px;
+            padding: 12px 13px;
+            color: #293951;
+            outline: none;
+            transition: .2s
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus,
+        .text-input:focus {
+            border-color: #8576e9;
+            box-shadow: 0 0 0 3px #7668e518
+        }
+
+        .field input[readonly] {
+            background: #f5f7fb
+        }
+
+        .field textarea,
+        .description {
+            resize: vertical;
+            min-height: 75px
+        }
+
+        .checks {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 13px
+        }
+
+        .checks.six {
+            grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+
+        .checks.three {
+            grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+
+        .check-card {
+            background: #fbfcff;
+            border: 1px solid #e5eaf3;
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 0
+        }
+
+        .check-card .q {
+            min-height: 38px;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.45;
+            margin-bottom: 13px
+        }
+
+        .yn {
+            display: flex;
+            gap: 6px
+        }
+
+        .yn label {
+            flex: 1;
+            text-align: center;
+            cursor: pointer
+        }
+
+        .yn input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none
+        }
+
+        .yn span {
+            display: block;
+            padding: 8px 4px;
+            border: 1px solid #e1e7f0;
+            border-radius: 8px;
+            color: #8894a8;
+            font-size: 11px;
+            font-weight: 800;
+            background: white
+        }
+
+        .yn input:checked+span {
+            color: #fff;
+            background: #6d59e5;
+            border-color: #6d59e5
+        }
+
+        .yn label:last-child input:checked+span {
+            background: #283c5e;
+            border-color: #283c5e
+        }
+
+        .check-card .field {
+            margin-top: 13px
+        }
+
+        .check-card input[type=number],
+        .check-card input[type=text] {
+            width: 100%;
+            min-width: 0
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 13px;
+            margin-top: 14px
+        }
+
+        .detail-grid.six {
+            grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+
+        .detail-grid.three {
+            grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+
+        .detail-grid label {
+            font-size: 10px;
+            color: #7786a1;
+            font-weight: 700
+        }
+
+        .detail-grid textarea {
+            width: 100%;
+            margin-top: 6px;
+            min-height: 68px;
+            border: 1px solid #e0e6f0;
+            border-radius: 9px;
+            background: #fcfdff;
+            padding: 10px;
+            resize: vertical;
+            font-size: 12px
+        }
+
+        .split-row {
+            display: grid;
+            grid-template-columns: 190px 1fr;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid #edf0f6
+        }
+
+        .split-row:last-child {
+            border-bottom: 0
+        }
+
+        .split-row .check-card {
+            border: 0;
+            background: transparent;
+            padding: 0
+        }
+
+        .split-row .check-card .q {
+            min-height: 0
+        }
+
+        .split-row textarea {
+            min-height: 66px
+        }
+
+        .day-notes {
+            min-height: 150px !important;
+            line-height: 1.7
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 0
+        }
+
+        .save-indicator {
+            font-size: 12px;
+            color: #8793aa
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 13px 20px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            justify-content: center
+        }
+
+        .btn-primary {
+            background: #6655e5;
+            color: white;
+            box-shadow: 0 6px 16px #6655e533
+        }
+
+        .btn-secondary {
+            background: #f1f0ff;
+            color: #6655da
+        }
+
+        .btn-outline {
+            background: white;
+            color: #4e5c74;
+            border: 1px solid #dce3ef
+        }
+
+        .btn:hover {
+            filter: brightness(.97)
+        }
+
+        #report-page {
+            display: none
+        }
+
+        .report-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0 28px
+        }
+
+        .report-wrapper {
+            overflow-x: auto;
+            padding: 3px 3px 25px
+        }
+
+        .report {
+            width: 850px;
+            margin: auto;
+            background: white;
+            border: 1px solid #e0e7f1;
+            box-shadow: 0 10px 45px #1b2e4b12;
+            border-radius: 18px;
+            overflow: hidden
+        }
+
+        .report-header {
+            background: #152344;
+            color: #fff;
+            padding: 31px 37px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .report-header .mini {
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #a8b6da;
+            font-size: 10px;
+            font-weight: 800
+        }
+
+        .report-header h2 {
+            font-size: 23px;
+            margin: 9px 0 5px
+        }
+
+        .report-header p {
+            color: #bec8e2;
+            font-size: 12px;
+            margin: 0
+        }
+
+        .report-tag {
+            border: 1px solid #536283;
+            color: #d7e2ff;
+            padding: 10px 13px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 800
+        }
+
+        .report-meta {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            background: #f6f8fd;
+            padding: 23px 35px;
+            border-bottom: 1px solid #e8edf5
+        }
+
+        .meta small {
+            display: block;
+            color: #8291aa;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: .5px;
+            font-size: 9px;
+            margin-bottom: 7px
+        }
+
+        .meta strong {
+            font-size: 13px
+        }
+
+        .report-body {
+            padding: 27px 35px 34px
+        }
+
+        .report-section {
+            margin-bottom: 24px
+        }
+
+        .report-section h3 {
+            font-size: 14px;
+            border-bottom: 1px solid #e6ebf4;
+            padding-bottom: 10px;
+            margin: 0 0 13px
+        }
+
+        .report-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px
+        }
+
+        .report-item {
+            padding: 12px 14px;
+            border: 1px solid #e6ebf3;
+            border-radius: 10px;
+            background: #fcfdff;
+            break-inside: avoid
+        }
+
+        .report-item b {
+            display: block;
+            font-size: 12px
+        }
+
+        .report-item p {
+            font-size: 11px;
+            color: #697994;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            margin: 7px 0 0;
+            overflow-wrap: anywhere
+        }
+
+        .report-item .status {
+            font-size: 10px;
+            font-weight: 800;
+            color: #6250d8
+        }
+
+        .report-item .status.yes {
+            color: #078b62
+        }
+
+        .report-item .status.no {
+            color: #7d8aa1
+        }
+
+        .report-wide {
+            grid-column: 1/-1
+        }
+
+        .report-footer {
+            background: #f6f8fd;
+            color: #7887a0;
+            text-align: center;
+            font-size: 10px;
+            padding: 17px
+        }
+
+        .notice {
+            padding: 12px 14px;
+            background: #fff9e9;
+            color: #946b17;
+            border: 1px solid #f5dfac;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.5
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 30;
+            padding: 13px 18px;
+            border-radius: 11px;
+            background: #182746;
+            color: white;
+            box-shadow: 0 10px 30px #14233b30;
+            font-size: 13px;
+            display: none;
+            max-width: 430px
+        }
+
+        dialog {
+            border: 0;
+            border-radius: 17px;
+            padding: 25px;
+            max-width: 420px;
+            width: calc(100% - 30px);
+            box-shadow: 0 25px 75px #0e183e4a
+        }
+
+        dialog::backdrop {
+            background: #101c38a8
+        }
+
+        dialog h2 {
+            margin: 0 0 10px;
+            font-size: 20px
+        }
+
+        dialog p {
+            line-height: 1.6;
+            color: #697890
+        }
+
+        dialog .dialog-buttons {
+            display: flex;
+            gap: 9px;
+            justify-content: flex-end;
+            margin-top: 23px
+        }
+
+        @media(max-width:1160px) {
+            .sidebar {
+                width: 205px
+            }
+
+            .content {
+                padding: 25px
+            }
+
+            .topbar {
+                padding: 0 25px
+            }
+
+            .fields.five {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .checks,
+            .detail-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        @media(max-width:760px) {
+            .sidebar {
+                display: none
+            }
+
+            .topbar {
+                height: 66px;
+                padding: 0 16px
+            }
+
+            .content {
+                padding: 22px 13px 45px
+            }
+
+            h1 {
+                font-size: 24px
+            }
+
+            .hero {
+                display: block
+            }
+
+            .hero .pill {
+                display: inline-block;
+                margin: 12px 0
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 9px
+            }
+
+            .panel-body {
+                padding: 17px
+            }
+
+            .panel-head {
+                padding: 18px
+            }
+
+            .fields.five,
+            .fields.three,
+            .fields.two,
+            .checks,
+            .checks.six,
+            .checks.three,
+            .detail-grid,
+            .detail-grid.six,
+            .detail-grid.three {
+                grid-template-columns: 1fr
+            }
+
+            .check-card .q {
+                min-height: 0
+            }
+
+            .split-row {
+                grid-template-columns: 1fr
+            }
+
+            .actions {
+                align-items: stretch;
+                flex-direction: column
+            }
+
+            .report {
+                margin: 0
+            }
+
+            .report-actions .btn {
+                flex: 1
+            }
+
+            .avatar span {
+                display: none
+            }
+        }
+
+        @media print {
+
+            .sidebar,
+            .topbar,
+            .report-actions,
+            .intro,
+            .hero,
+            .stats,
+            .notice {
+                display: none !important
+            }
+
+            .content {
+                padding: 0
+            }
+
+            .report {
+                border: 0;
+                box-shadow: none
+            }
+
+            .report-wrapper {
+                overflow: visible
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brandmark">✦</div>
+                <div><b>FOA Workspace</b><small>IT Operations Portal</small></div>
+            </div>
+            <div class="side-label">WORKSPACE</div><button class="nav active" id="nav-form" onclick="showPage('form')">▦
+                &nbsp; Daily Progress</button><button class="nav" id="nav-report" onclick="showPage('report')">▤ &nbsp;
+                Report Preview</button>
+            <div class="side-bottom"><strong>✦ Streamline your day</strong><br>Log tasks, record activities, and share a
+                professional summary with your seniors.</div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div class="crumb">IT Operations &nbsp; / &nbsp; <strong>Daily Progress Tracker</strong></div>
+                <div class="avatar">
+                    <div class="avatar-icon">HK</div><span>Huzaifa Khan</span>
+                </div>
+            </header>
+            <div class="content">
+                <section id="form-page">
+                    <div class="hero">
+                        <div>
+                            <div class="eyebrow">FAIZAN ONLINE ACADEMY · IT Department</div>
+                            <h1>Daily Progress Tracker <span style="color:#6d58dc">✦</span></h1>
+                            <p class="intro">Capture your work, keep records organized, and share your daily
+                                accomplishments.</p>
+                        </div><span class="pill">● &nbsp; Daily IT Operations</span>
+                    </div>
+                    <div class="stats">
+                        <div class="stat">
+                            <div><small>REPORT DATE</small><strong id="stat-date">Today</strong></div>
+                            <div class="bubble">▦</div>
+                        </div>
+                        <div class="stat">
+                            <div><small>QUESTIONS ANSWERED</small><strong id="answered">0 / 20</strong></div>
+                            <div class="bubble">☑</div>
+                        </div>
+                        <div class="stat">
+                            <div><small>REPORT STATUS</small><strong id="status-text" style="font-size:17px">In
+                                    progress</strong></div>
+                            <div class="bubble">↗</div>
+                        </div>
+                    </div>
+                    <form id="tracker-form">
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div class="section-icon">♙</div>
+                                <div>
+                                    <h2>Officer & Duty Details</h2>
+                                    <p>Daily attendance and officer identification</p>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="fields five"><label class="field">Officer Name<input name="officer"
+                                            value="Huzaifa Khan" required></label><label class="field">Branch Code<input
+                                            name="branch" value="HYD-FSS" required></label><label
+                                        class="field">Date<input name="date" id="report-date" type="date"
+                                            required></label><label class="field">Duty In<input name="timeIn"
+                                            type="time"></label><label class="field">Duty Out<input name="timeOut"
+                                            type="time"></label></div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div class="section-icon blue">◈</div>
+                                <div>
+                                    <h2>Daily Inspection Checklist</h2>
+                                    <p>Network, requests and assets condition</p>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="checks" id="checks-inspection"></div>
+                                <div class="detail-grid" id="details-inspection"></div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div class="section-icon green">▣</div>
+                                <div>
+                                    <h2>Server & System Maintenance</h2>
+                                    <p>Routine operations, updates and maintenance</p>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="checks six" id="checks-maintenance"></div>
+                                <div class="detail-grid six" id="details-maintenance"></div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div class="section-icon orange">✧</div>
+                                <div>
+                                    <h2>Tasks Assigned by Management</h2>
+                                    <p>Track instructions received from management</p>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="checks three" id="checks-management"></div>
+                                <div class="detail-grid three" id="details-management"></div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div class="section-icon">✎</div>
+                                <div>
+                                    <h2>Daily Work Log</h2>
+                                    <p>Describe key achievements, support provided, or any other activity</p>
+                                </div>
+                            </div>
+                            <div class="panel-body"><label class="field">TODAY'S ACTIVITIES<textarea class="day-notes"
+                                        name="workLog"
+                                        placeholder="• Resolved network and connectivity issues...&#10;• Installed or configured systems...&#10;• Coordinated with departments..."></textarea></label>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div class="section-icon blue">▤</div>
+                                <div>
+                                    <h2>Additional Support & Follow-ups</h2>
+                                    <p>Backup laptops, home laptop inspections and branch requests</p>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="fields three">
+                                    <div id="backup-checkbox"></div><label class="field">Backup Laptop Number<input
+                                            name="backupLaptopNo" placeholder="e.g. FOACMHYD023"></label><label
+                                        class="field">Experience / Condition<textarea name="backupExperience"
+                                            placeholder="Performance, issues, experience..."></textarea></label>
+                                </div>
+                                <div id="support-rows" style="margin-top:14px"></div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div class="section-icon orange">☷</div>
+                                <div>
+                                    <h2>Pending Tasks & Learning</h2>
+                                    <p>Escalations, SOP reading and self-development</p>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="fields three">
+                                    <div id="pending-checkbox"></div><label class="field">Escalation / Reporting
+                                        To<select name="pendingDesignation">
+                                            <option value="">Select designation</option>
+                                            <option>Shift Nazim</option>
+                                            <option>Branch Nazim</option>
+                                            <option>Region Zimmadar IT</option>
+                                        </select></label><label class="field">Pending Task Details<textarea
+                                            name="pendingDetails"
+                                            placeholder="Task, reason, expected follow-up..."></textarea></label>
+                                </div>
+                                <div id="learning-rows" style="margin-top:16px"></div>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <div class="save-indicator">🔒 Your draft is stored in this browser until you clear it.
+                            </div>
+                            <div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button"
+                                    class="btn btn-outline" onclick="clearDraft()">Clear Draft</button><button
+                                    type="button" class="btn btn-secondary" onclick="previewReport()">Preview
+                                    Report</button><button type="submit" class="btn btn-primary">Submit Daily Progress
+                                    &nbsp; →</button></div>
+                        </div>
+                    </form>
+                </section>
+                <section id="report-page">
+                    <div class="eyebrow">FAIZAN ONLINE ACADEMY · IT OPERATIONS</div>
+                    <h1>Progress Report & Sharing</h1>
+                    <p class="intro">Review your report, export it as an image, or copy a clear message-ready summary.
+                    </p>
+                    <div id="sync-message" class="notice">Google Sheets connection is not yet configured. You can still
+                        preview, copy and export your report.</div>
+                    <div class="report-actions"><button class="btn btn-outline" onclick="showPage('form')">← Edit
+                            Responses</button><button class="btn btn-primary" onclick="saveImage()">⬇ &nbsp; Save as
+                            Image (PNG)</button><button class="btn btn-secondary" onclick="copySummary()">▤ &nbsp; Copy
+                            as Text</button><button class="btn btn-outline" onclick="saveToSheet()">☁ &nbsp; Save to
+                            Google Sheet</button></div>
+                    <div class="report-wrapper">
+                        <div class="report" id="report-capture">
+                            <div class="report-header">
+                                <div>
+                                    <div class="mini">FAIZAN ONLINE ACADEMY · IT SUPPORT</div>
+                                    <h2>Daily Progress Report</h2>
+                                    <p>Operations · Maintenance · Support · Follow-ups</p>
+                                </div>
+                                <div class="report-tag">✦ IT OPERATIONS</div>
+                            </div>
+                            <div class="report-meta" id="report-meta"></div>
+                            <div class="report-body" id="report-body"></div>
+                            <div class="report-footer">FAIZAN ONLINE ACADEMY &nbsp; • &nbsp; Daily IT Progress &nbsp; •
+                                &nbsp; Internal Reporting</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <dialog id="confirm-dialog">
+        <h2>Submit your daily progress?</h2>
+        <p>Your report will be prepared for sharing. If Google Sheets has been connected, the app will also attempt to
+            save your record there.</p>
+        <div class="dialog-buttons"><button class="btn btn-outline"
+                onclick="document.getElementById('confirm-dialog').close()">Cancel</button><button
+                class="btn btn-primary" id="confirm-submit">Confirm & Continue →</button></div>
+    </dialog>
+    <div class="toast" id="toast"></div>
+    <script>
+        /* Paste your DEPLOYED Google Apps Script Web App URL here (must end in /exec). The spreadsheet edit URL is NOT a write endpoint. */
+        const SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyzqNZIlGy_RUseucACE22Fuubao6ZcX3tH5WXz4j7pCcOusrPJ0th4cwDXnfSk40sr/exec';
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1o90o6H025kDfLrVpdNp2a9hj0v7bSU0CnX9GTDp21U8/edit';
+        const groups = { inspection: [['internet', 'Checked internet (main & backup)?'], ['rrf', 'Any pending RRF?'], ['tms', 'Any pending TMS?'], ['placement', 'Checked assets placement (cables, mouse, charger)?'], ['physical', 'Are all items physically OK?']], maintenance: [['server', 'Operated server / backed up user data?'], ['quickScan', 'Performed quick scans?'], ['updates', 'Checked Windows updates?'], ['backupItems', 'Checked backup items (headphones, mouse)?'], ['scrap', 'Checked scrap items?'], ['temperature', 'Checked server room temperature?']], management: [['nazim', 'Task assigned by Nazim?'], ['branchNazim', 'Task assigned by Branch Nazim?'], ['regionIT', 'Task assigned by Region Zimmadar IT?']] };
+        const extra = [['backup', 'Operated backup laptop?'], ['home', 'Checked any home laptop?'], ['sukkur', 'Any complaint from Sukkur Branch?'], ['pending', 'Any pending tasks?'], ['sop', 'Did you read any SOP?'], ['learning', 'Did you do self-learning?']];
+        const form = document.getElementById('tracker-form'); const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        function yn(key, label) { return `<div class="check-card"><div class="q">${esc(label)}</div><div class="yn"><label><input type="radio" name="${key}" value="Yes"><span>✓ Yes</span></label><label><input type="radio" name="${key}" value="No"><span>✕ No</span></label></div>${key === 'quickScan' || key === 'updates' ? `<label class="field">NUMBER OF LAPTOPS<input type="number" min="0" name="${key}Count" placeholder="0"></label>` : ''}${key === 'temperature' ? `<label class="field">TEMPERATURE (°C)<input type="number" step="0.1" name="temperatureValue" placeholder="e.g. 24"></label>` : ''}</div>` }
+        for (let [g, items] of Object.entries(groups)) { document.getElementById('checks-' + g).innerHTML = items.map(([key, label]) => yn(key, label)).join(''); document.getElementById('details-' + g).innerHTML = items.map(([key, label]) => `<label><span>${esc(label)}</span><textarea name="${key}Detail" placeholder="Add details (optional)..."></textarea></label>`).join('') }
+        document.getElementById('backup-checkbox').innerHTML = yn('backup', extra[0][1]); function splitRow(key, label, placeholder) { return `<div class="split-row">${yn(key, label)}<label class="field">DETAILS<textarea name="${key}Detail" placeholder="${placeholder}"></textarea></label></div>` }; document.getElementById('support-rows').innerHTML = splitRow('home', extra[1][1], 'Laptop number, issue, action taken...') + splitRow('sukkur', extra[2][1], 'Complaint and resolution...'); document.getElementById('pending-checkbox').innerHTML = yn('pending', extra[3][1]); document.getElementById('learning-rows').innerHTML = splitRow('sop', extra[4][1], 'SOP title, key takeaway...') + splitRow('learning', extra[5][1], 'Topic, source, skills learned...');
+        const today = new Date(); const localDate = [today.getFullYear(), String(today.getMonth() + 1).padStart(2, '0'), String(today.getDate()).padStart(2, '0')].join('-'); document.getElementById('report-date').value = localDate;
+        let lastSubmitted = false; function values() { const fd = new FormData(form); const obj = {}; for (const [key, value] of fd.entries()) obj[key] = value; return obj } function value(k) { return values()[k] || '' } function saveDraft() { localStorage.setItem('foaDailyTrackerDraft', JSON.stringify(values())); updateStats() } function restore() { try { const data = JSON.parse(localStorage.getItem('foaDailyTrackerDraft') || 'null'); if (!data) return; for (const [k, v] of Object.entries(data)) { const input = form.elements.namedItem(k); if (!input) continue; if (typeof input.length === 'number' && input[0]?.type === 'radio') { for (const item of input) item.checked = item.value === v } else if ('value' in input) input.value = v } } catch (e) { console.warn(e) } } restore();
+        function updateStats() { const o = values(), all = [...Object.values(groups).flat().map(a => a[0]), ...extra.map(a => a[0])]; document.getElementById('answered').textContent = all.filter(x => o[x]).length + ' / ' + all.length; const dt = o.date ? new Date(o.date + 'T12:00') : null; document.getElementById('stat-date').textContent = dt ? dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Choose date' } form.addEventListener('input', saveDraft); form.addEventListener('change', saveDraft); updateStats();
+        function showPage(page) { document.getElementById('form-page').style.display = page === 'form' ? '' : 'none'; document.getElementById('report-page').style.display = page === 'report' ? 'block' : 'none'; document.getElementById('nav-form').classList.toggle('active', page === 'form'); document.getElementById('nav-report').classList.toggle('active', page === 'report'); if (page === 'report') renderReport(); window.scrollTo({ top: 0, behavior: 'smooth' }) } function toast(s) { const e = document.getElementById('toast'); e.textContent = s; e.style.display = 'block'; clearTimeout(window.toastTimeout); window.toastTimeout = setTimeout(() => e.style.display = 'none', 4500) }
+        function pretty(k, o) { if (k === 'quickScan') return (o.quickScan || 'Not answered') + (o.quickScanCount !== undefined ? ' · ' + o.quickScanCount + ' laptops' : ''); if (k === 'updates') return (o.updates || 'Not answered') + (o.updatesCount !== undefined ? ' · ' + o.updatesCount + ' laptops' : ''); if (k === 'temperature') return (o.temperature || 'Not answered') + (o.temperatureValue ? ' · ' + o.temperatureValue + ' °C' : ''); return o[k] || 'Not answered' } function reportSection(title, items, o, icon) { return `<section class="report-section"><h3>${icon} &nbsp; ${esc(title)}</h3><div class="report-items">${items.map(([key, label]) => { const status = pretty(key, o), details = o[key + 'Detail'] || ''; return `<div class="report-item"><b>${esc(label)}</b><p class="status ${o[key] === 'Yes' ? 'yes' : o[key] === 'No' ? 'no' : ''}">${esc(status)}</p>${details ? `<p>${esc(details)}</p>` : ''}</div>` }).join('')}</div></section>` }
+        function renderReport() { const o = values(); document.getElementById('report-meta').innerHTML = [['OFFICER', o.officer], ['BRANCH', o.branch], ['REPORT DATE', o.date], ['DUTY HOURS', (o.timeIn || '—') + ' — ' + (o.timeOut || '—')]].map(([a, b]) => `<div class="meta"><small>${esc(a)}</small><strong>${esc(b || '—')}</strong></div>`).join(''); let html = reportSection('Daily Inspection', groups.inspection, o, '🛜') + reportSection('Server & Maintenance', groups.maintenance, o, '🖥️') + reportSection('Management Assigned Tasks', groups.management, o, '📌'); html += `<section class="report-section"><h3>📝 &nbsp; Work Completed Today</h3><div class="report-items"><div class="report-item report-wide"><p>${esc(o.workLog || 'No daily activities recorded.')}</p></div></div></section>`; html += reportSection('Additional Support', extra.slice(0, 3), o, '💻'); html += `<section class="report-section"><h3>💼 &nbsp; Backup Laptop & Pending Task Details</h3><div class="report-items"><div class="report-item"><b>Backup Laptop Number</b><p>${esc(o.backupLaptopNo || '—')}</p><p>${esc(o.backupExperience || '')}</p></div><div class="report-item"><b>Pending tasks · ${esc(o.pending || 'Not answered')}</b><p>Reporting to: ${esc(o.pendingDesignation || '—')}</p><p>${esc(o.pendingDetails || 'No additional details')}</p></div></div></section>`; html += reportSection('Professional Learning', extra.slice(4), o, '📚'); document.getElementById('report-body').innerHTML = html }
+        function previewReport() { renderReport(); showPage('report') } form.addEventListener('submit', e => { e.preventDefault(); if (!form.reportValidity()) return; document.getElementById('confirm-dialog').showModal() }); document.getElementById('confirm-submit').onclick = async () => { document.getElementById('confirm-dialog').close(); lastSubmitted = true; document.getElementById('status-text').textContent = 'Report prepared'; showPage('report'); if (SHEETS_WEB_APP_URL) await saveToSheet() };
+        function textSummary() { const o = values(); const lines = ['📊 *FAIZAN ONLINE ACADEMY*', '🛠️ *DAILY IT PROGRESS REPORT*', '━━━━━━━━━━━━━━━━━━', `👨‍💻 Officer: ${o.officer || '—'}`, `🏢 Branch: ${o.branch || '—'}`, `📅 Date: ${o.date || '—'}`, `🕘 Duty: ${o.timeIn || '—'} to ${o.timeOut || '—'}`, '']; for (const [title, icon, items] of [['DAILY INSPECTION', '🔎', groups.inspection], ['SERVER & MAINTENANCE', '🖥️', groups.maintenance], ['MANAGEMENT TASKS', '📌', groups.management], ['ADDITIONAL SUPPORT', '💻', extra.slice(0, 3)], ['LEARNING', '📚', extra.slice(4)]]) { lines.push(icon + ' *' + title + '*'); for (const [key, label] of items) { const prefix = o[key] === 'Yes' ? '✅' : o[key] === 'No' ? '❌' : '▫️'; lines.push(`${prefix} ${label}: ${pretty(key, o)}`); if (o[key + 'Detail']) lines.push('   ↳ ' + o[key + 'Detail']) } lines.push('') } lines.push('📝 *WORK COMPLETED*', o.workLog || 'No details entered.', '', '💻 *BACKUP LAPTOP*', `Laptop #: ${o.backupLaptopNo || '—'}`, `Experience: ${o.backupExperience || '—'}`, '', '⏳ *PENDING TASKS*', `Status: ${o.pending || 'Not answered'}`, `Reporting to: ${o.pendingDesignation || '—'}`, `Details: ${o.pendingDetails || '—'}`, '', '━━━━━━━━━━━━━━━━━━', '📍 *Faizan Online Academy · IT Support*'); return lines.join('\n') }
+        async function copySummary() { const t = textSummary(); try { await navigator.clipboard.writeText(t); toast('✓ Progress summary copied! Paste it into WhatsApp, Teams or email.') } catch (e) { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('✓ Summary copied to clipboard.') } }
+        async function saveImage() { const btn = document.activeElement; try { if (typeof html2canvas !== 'function') throw Error('Image library unavailable. Connect to the internet and reload this HTML file.'); if (btn) btn.disabled = true; renderReport(); const node = document.getElementById('report-capture'); const c = await html2canvas(node, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false, windowWidth: 1100 }); const a = document.createElement('a'); a.download = 'FOA_Daily_Progress_' + (value('date') || localDate) + '.png'; a.href = c.toDataURL('image/png'); a.click(); toast('✓ PNG report downloaded successfully.') } catch (e) { toast('Image export failed: ' + e.message) } finally { if (btn) btn.disabled = false } }
+        async function saveToSheet() { if (!SHEETS_WEB_APP_URL) { document.getElementById('sync-message').textContent = '⚠ Google Sheets not connected yet. Deploy the supplied Google Apps Script and paste its /exec URL into SHEETS_WEB_APP_URL in the HTML file.'; toast('Google Sheet needs a one-time Apps Script setup.'); return } const o = values(); const msg = document.getElementById('sync-message'); msg.textContent = '☁ Sending data to Google Sheets…'; try { const response = await fetch(SHEETS_WEB_APP_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'saveProgress', data: o }) }); const result = await response.json(); if (!response.ok || !result.ok) throw Error(result.error || 'Server returned an error'); msg.textContent = '✓ Saved to Google Sheets successfully. Record row: ' + result.row; msg.style.background = '#e6f8f0'; msg.style.color = '#16714e'; toast('✓ Google Sheets sync successful!'); } catch (err) { msg.textContent = '⚠ Unable to verify Google Sheets save: ' + err.message + ' · Check your Apps Script deployment and permissions.'; msg.style.background = '#fff9e9'; msg.style.color = '#946b17'; toast('Google Sheets save failed; report is available locally.') } }
+        function clearDraft() { if (!confirm('Clear all saved responses in this browser?')) return; localStorage.removeItem('foaDailyTrackerDraft'); form.reset(); document.getElementById('report-date').value = localDate; document.getElementById('status-text').textContent = 'In progress'; updateStats(); toast('Draft cleared.') } window.addEventListener('beforeunload', saveDraft);
+    </script>
+</body>
+
+</html>
